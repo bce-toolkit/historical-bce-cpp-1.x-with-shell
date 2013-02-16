@@ -1,0 +1,21 @@
+Input:
+{numerator1}
+{denominator1}
+{numerator2}
+{denominator2}
+
+#  a = {numerator1} / {denominator1}
+#  b = {numerator2} / {denominator2}
+
+Output:
+a +  b
+a -  b
+a *  b
+a /  b
+a %  b
+a == b
+a != b
+a <  b
+a <= b
+a >  b
+a >= b

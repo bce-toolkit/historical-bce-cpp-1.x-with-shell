@@ -1,0 +1,13 @@
+Input:
+{size_x} {size_y}
+{(0, 0)} {(1, 0)} ... {(size_x - 1, 0)}
+{(0, 1)} {(1, 1)} ... {(size_x - 1, 1)}
+  ....     ....   ...  ...............
+{(0, size_y - 1)} ... {(size_x - 1, size_y - 1)}
+
+# {size_x}, {size_y} > 0
+
+Output:
+{Result 1}
+ ........
+{Result size_x - 1}

@@ -1,0 +1,7 @@
+Input:
+{formula}
+
+Output:
+{name 1} {right 1} {negative 1}
+ ......   .....   ........
+{name N} {right N} {negative N}

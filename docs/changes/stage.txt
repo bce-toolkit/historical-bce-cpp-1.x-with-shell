@@ -1,0 +1,14 @@
+Sat Feb 16 11:17:59 2013 Ji WenCong <whs_jwc@163.com>
+	* Add prebuilts for CUI, GUI and Tester.
+	* Stable channel: 1.0.728.1 => 1.0.728.2
+
+Sat Feb 16 11:17:59 2013 Ji WenCong <whs_jwc@163.com>
+	* Stable channel: (None) => 1.0.728.1
+
+Sat Feb 16 11:17:59 2013 Ji WenCong <whs_jwc@163.com>
+	* Ported C to C++.
+	* Added GUI written with QT.
+	* Added auto-fix support for multi result equations.
+	* Added unit-tests.
+	* Added high precision integer calculation module.
+

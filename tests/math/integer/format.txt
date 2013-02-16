@@ -1,0 +1,42 @@
+base, extra {
+
+Input:
+{a}
+{b}
+
+Output:
+a +  b
+a -  b
+a *  b
+a /  b
+a %  b
+a == b
+a != b
+a <  b
+a <= b
+a >  b
+a >= b
+
+};
+
+gcd {
+
+Input:
+{a}
+{b}
+
+Output:
+gcd(a, b)
+
+};
+
+lcm {
+
+Input:
+{a}
+{b}
+
+Output:
+lcm(a, b)
+
+};
