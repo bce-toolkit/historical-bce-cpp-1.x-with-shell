@@ -32,8 +32,7 @@
 	#include <math/fraction.hpp>
 	#include <math/polynomial_unknown.hpp>
 
-	using std::vector;
-	using std::string;
+	using namespace std;
 
 	class polynomial {
 	public:
@@ -44,7 +43,6 @@
 		~polynomial();
 		bool isNumeric();
 		void clear();
-		void sortOut();
 		void addUnknown(const integer &sign, const fraction &prefix);
 		fraction getConstant();
 		void setConstant(const fraction &src);

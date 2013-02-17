@@ -29,7 +29,7 @@
 	#include <vector>
 	#include <math/matrix.hpp>
 
-	using std::vector;
+	using namespace std;
 
 	/*  External declares  */
 	bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, vector<polynomial> &result);

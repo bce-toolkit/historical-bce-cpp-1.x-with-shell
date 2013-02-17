@@ -38,9 +38,7 @@
 #include <parser/molecule.hpp>
 #include <parser/syntax.hpp>
 
-using std::string;
-using std::vector;
-using std::iterator;
+using namespace std;
 
 /*
  *	vector<cdec> syntaxPreparser(const string formula)
@@ -74,7 +72,7 @@ vector<cdec> syntaxPreparser(const string formula) {
 			}
 		}
 
-		if (stack != integer(0)) {
+		if (stack.isZero() == false) {
 			continue;
 		}
 
@@ -82,7 +80,7 @@ vector<cdec> syntaxPreparser(const string formula) {
 		if (idx == formula.length() || formula.substr(idx, 1) == PARSER_SYNTAX_PLUS || formula.substr(idx, 1) == PARSER_SYNTAX_MINUS || formula.substr(idx, 1) == PARSER_SYNTAX_SEPARATOR || formula.substr(idx, 1) == PARSER_SYNTAX_EQUAL) {
 			/*  Get the chemical formula  */
 			cheq = formula.substr(last, idx - last);
-			if (cheq == "") {
+			if (cheq.length() == 0) {
 				if (formula.substr(idx, 1) == PARSER_SYNTAX_EQUAL) {
 					rdequal = true;
 				}

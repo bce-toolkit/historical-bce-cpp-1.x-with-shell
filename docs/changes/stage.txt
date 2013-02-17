@@ -1,3 +1,10 @@
+Sun Feb 17 20:53:42 2013 Ji WenCong <whs_jwc@163.com>
+	* Optimize for empty string, zero-integers and zero-fractions.
+	* Stable channel: 1.0.728.2 => 1.0.728.3
+
+Sun Feb 17 10:15:20 2013 Ji WenCong <whs_jwc@163.com>
+	* Optimize polynomial module: removed sortOut() function.
+
 Sat Feb 16 11:17:59 2013 Ji WenCong <whs_jwc@163.com>
 	* Add prebuilts for CUI, GUI and Tester.
 	* Stable channel: 1.0.728.1 => 1.0.728.2

@@ -26,17 +26,17 @@
 #ifndef __VERSION_H__
 	#define __VERSION_H__
 
-	#define VER_FILEVERSION             1,0,728,2
-	#define VER_FILEVERSION_STR         "1.0.728.2\0"
+	#define VER_FILEVERSION             1,0,728,3
+	#define VER_FILEVERSION_STR         "1.0.728.3\0"
 
-	#define VER_PRODUCTVERSION          1,0,728,2
-	#define VER_PRODUCTVERSION_STR      "1.0.728.2\0"
+	#define VER_PRODUCTVERSION          1,0,728,3
+	#define VER_PRODUCTVERSION_STR      "1.0.728.3\0"
 
 	#define VER_COMPANYNAME_STR         "The BCE++ Authors"
 	#define VER_LEGALCOPYRIGHT_STR      "Copyright (C) 2012-2013 the BCE++ Authors. All rights reserved."
 	#define VER_LEGALTRADEMARKS_STR     "'BCE++' and 'BCE' are registered trademark of XiaoJSoft Studio and other BCE/BCE++ authors."
 	#define VER_PRODUCTNAME_STR         "BCE++"
 
-	#define BCE_REVISION 10007282
+	#define BCE_REVISION 10007283
 #endif
 

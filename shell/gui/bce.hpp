@@ -29,7 +29,7 @@
 	#include <QMainWindow>
 	#include <string>
 
-	using std::string;
+	using namespace std;
 
 	namespace Ui {
 	class MainWindow;

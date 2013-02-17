@@ -26,7 +26,7 @@
 #include <string>
 #include <common/exception.hpp>
 
-using std::string;
+using namespace std;
 
 /*
  *	xsvException::xsvException()

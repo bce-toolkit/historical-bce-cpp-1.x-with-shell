@@ -28,7 +28,7 @@
 #include <parser/common.hpp>
 #include <parser/element.hpp>
 
-using std::string;
+using namespace std;
 
 /*
  *	t_element::t_element()
@@ -87,23 +87,22 @@ bool t_element::parseString(const string &src) {
 	string t_number;
 	t_number = parserNumericSuffix(src, symbol);
 
-	if (symbol == "") {
+	if (symbol.length() == 0) {
 		return(false);
 	}
 
-	if (t_number == "") {
+	if (t_number.length() == 0) {
 		count.setValue(1);
 	} else {
 		count.setValue(t_number);
 	}
 
-	if (count == integer(0)) {
+	if (count.isZero() == true) {
 		return(false);
+	} else {
+		return(true);
 	}
-
-	return(true);
 }
-
 /*
  *	struct t_element& t_element::operator=(const struct t_element &src)
  *

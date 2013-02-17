@@ -30,7 +30,7 @@
 #include <math/matrix.hpp>
 #include <math/equation.hpp>
 
-using std::vector;
+using namespace std;
 
 /*
  *	bool equationSolve(matrix &mtx, size_t ofx, v ofy, size_t mx, size_t my, vector<polynomial> &result)
@@ -49,13 +49,14 @@ bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, ve
 		return(false);
 	}
 
-	/*  Reroute to make the top-left element of the matrix a non-zero value, eg:
+	/*
+	 *  Reroute to make the top-left element of the matrix a non-zero value, eg:
 	 *  > 0 1 3   =>  > 1 2 2
 	 *  > 1 2 2       > 0 1 3
 	 *    1 0 -4        1 0 -4
 	 */
 	for (py = 0; py < my; py++) {
-		if (mtx.read(ofx, ofy + py) != fraction(0, 1)) {
+		if (mtx.read(ofx, ofy + py).isZero() == false) {
 			mtx.swapRow(ofy, ofy + py);
 			exchanged = true;
 			break;
@@ -66,11 +67,9 @@ bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, ve
 		/*  If elements in the first column are all zero, remove the first column and continue solving recursively.  */
 		rsvResult.clear();
 
-		if (mx > 2) {
-			/*  Continue solving the matrix without the first column  */
-			if (equationSolve(mtx, ofx + 1, ofy, mx - 1, my, rsvResult) == false) {
-				return(false);
-			}
+		/*  Continue solving the matrix without the first column  */
+		if (mx > 2 && equationSolve(mtx, ofx + 1, ofy, mx - 1, my, rsvResult) == false) {
+			return(false);
 		}
 
 		/*  Add the unknown corresponding to the first column of the matrix to the unknown table of the result  */
@@ -82,11 +81,13 @@ bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, ve
 
 		return(true);
 	}
+
 	if (mx == 2 || my == 1) {
 		/*  Recursive endpoint: to get the value of remain unknowns  */
 		rsvResult.clear();
 		build.clear();
 		build.setConstant(mtx.read(ofx + mx - 1, ofy));
+
 		for (px = 1; px <= mx - 2; px++) {
 			tmp.clear();
 			tmp.setConstant(fraction(0, 1));
@@ -94,13 +95,14 @@ bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, ve
 			rsvResult.insert(rsvResult.end(), tmp);
 			build.addUnknown(integer(ofx) + integer(px), fraction(0, 1) - mtx.read(ofx + px, ofy));
 		}
+
 		build.multiply(fraction(1, 1) / mtx.read(ofx, ofy));
 		rsvResult.insert(rsvResult.begin(), build);
 		result = rsvResult;
 	} else {
 		/*  Eliminate  */
 		for (py = 0; py < my; py++) {
-			if (mtx.read(ofx, ofy + py) != fraction(0, 1)) {
+			if (mtx.read(ofx, ofy + py).isZero() == false) {
 				for (px = 0; px < mx; px++) {
 					if (py == 0) {
 						mtx.write(ofx + mx - px - 1, ofy + py, mtx.read(ofx + mx - px - 1, ofy + py) / mtx.read(ofx, ofy + py));
@@ -120,11 +122,13 @@ bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, ve
 		/*  Back substitution  */
 		build.clear();
 		build.setConstant(mtx.read(ofx + mx - 1, ofy));
+
 		for (px = 1; px < mx - 1; px++) {
 			tmp = rsvResult.at(px - 1);
 			tmp.multiply(mtx.read(ofx + px, ofy));
 			build.mergeCost(tmp);
 		}
+
 		rsvResult.insert(rsvResult.begin(), build);
 		result = rsvResult;
 	}
@@ -140,19 +144,23 @@ bool equationSolve(matrix &mtx, size_t ofx, size_t ofy, size_t mx, size_t my, ve
 bool equationCheckResult(const matrix &mtx, size_t mx, size_t my, vector<polynomial> &result) {
 	size_t px, py;
 	polynomial checker, tmp;
+
 	for (py = 0; py < my; py++) {
 		/*  Check each equation  */
 		checker.clear();
 		checker.setConstant(fraction(0, 1));
+
 		for (px = 0; px < mx - 1; px++) {
 			tmp = result.at(px);
 			tmp.multiply((const_cast<matrix&>(mtx)).read(px, py));
 			checker.merge(tmp);
 		}
+
 		if (checker.isNumeric() == false || checker.getConstant() != (const_cast<matrix&>(mtx)).read(mx - 1, py)) {
 			return(false);
 		}
 	}
+
 	return(true);
 }
 

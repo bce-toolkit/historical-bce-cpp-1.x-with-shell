@@ -30,8 +30,7 @@
 	#include <vector>
 	#include <math/matrix.hpp>
 
-	using std::string;
-	using std::vector;
+	using namespace std;
 
 	struct t_syntax_chemical_equation_decoder {
 		string symbol;

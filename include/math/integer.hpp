@@ -28,7 +28,7 @@
 
 	#include <string>
 
-	using std::string;
+	using namespace std;
 
 	class integer {
 	public:
@@ -47,6 +47,7 @@
 		void setValue(const integer &src);
 		void absolute();
 		void opposite();
+		bool isZero();
 		bool isNegative();
 		integer& operator=(const integer &src);
 		bool operator==(const integer &src);

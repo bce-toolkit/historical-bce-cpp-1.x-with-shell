@@ -36,10 +36,7 @@
 #include <parser/molecule.hpp>
 #undef __REQUIRE_MOLECULE_REPLACE_TABLE__
 
-using std::lower_bound;
-using std::string;
-using std::vector;
-using std::iterator;
+using namespace std;
 
 /*
  *	bool parseMolecule(const string &formula, int *status, const integer &suffix, vector<element> &result)
@@ -55,13 +52,13 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 
 	/*  Get the prefix number  */
 	rdprefix = parserNumericPrefix(formula, rdformula);
-	if (rdprefix == "") {
+	if (rdprefix.length() == 0) {
 		rdprefix = PARSER_MOLECULE_NUMBER_ONE;
 	}
 
 	rdsuffix.setValue(rdprefix);
 	rdsuffix *= suffix;
-	if (rdformula == "") {
+	if (rdformula.length() == 0) {
 		return(true);
 	}
 
@@ -78,7 +75,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 			continue;
 		}
 
-		if (stack == integer(0) && rdformula.substr(idx, 1) == ".") {
+		if (stack.isZero() == true && rdformula.substr(idx, 1) == PARSER_MOLECULE_HYDRATE_SIGN) {
 			return(parseMolecule(rdformula.substr(idx + 1), status, rdsuffix, result) == true && parseMolecule(rdformula.substr(0, idx), status, rdsuffix, result) == true);
 		}
 	}
@@ -96,7 +93,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 
 				if (rdformula.substr(idx, 1) == BRACKET_END_A || rdformula.substr(idx, 1) == BRACKET_END_B || rdformula.substr(idx, 1) == BRACKET_END_C) {
 					stack--;
-					if (stack == integer(0)) {
+					if (stack.isZero() == true) {
 						bkend = idx;
 						goto bracket_analyzed;
 					}
@@ -116,7 +113,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 
 			/*  Get the suffix of the bracket  */
 			tmp_prefix = parserNumericPrefix(bkright, tmp_formula);
-			if (tmp_prefix == "") {
+			if (tmp_prefix.length() == 0) {
 				tmp_prefix = PARSER_MOLECULE_NUMBER_ONE;
 			}
 			bksuffix.setValue(tmp_prefix);
@@ -130,7 +127,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 	for (idx = 1; idx <= rdformula.length(); idx++) {
 		if (idx == rdformula.length() || isupper(rdformula.at(idx))) {
 			/*  Check whether current formula is in the replace table  */
-			for (tableID = 0; replace_table[tableID].name != ""; tableID++) {
+			for (tableID = 0; replace_table[tableID].name.length() != 0; tableID++) {
 				if (rdformula.substr(0, tableID) == replace_table[tableID].name) {
 					/*  Re-parse  */
 					if (parseMolecule(replace_table[tableID].target, status, rdsuffix * replace_table[tableID].suffix, result) == false) {
@@ -156,7 +153,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 			if (find != result.end()) {
 				if (*find == build) {
 					find->count += build.count;
-					if (find->count == integer(0)) {
+					if (find->count.isZero() == true) {
 						result.erase(find);
 					}
 					goto element_inserted;
@@ -167,9 +164,9 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 element_inserted:
 			if (parseMolecule(rdformula.substr(idx), status, rdsuffix, result) == false) {
 				return(false);
+			} else {
+				return(true);
 			}
-
-			return(true);
 		}
 	}
 	return(false);

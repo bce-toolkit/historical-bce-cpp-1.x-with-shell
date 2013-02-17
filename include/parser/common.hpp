@@ -28,7 +28,7 @@
 
 	#include <string>
 
-	using std::string;
+	using namespace std;
 
 	string parserNumericPrefix(const string &src, string &remain);
 	string parserNumericSuffix(const string &src, string &remain);

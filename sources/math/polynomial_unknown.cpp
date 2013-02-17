@@ -28,6 +28,8 @@
 #include <math/fraction.hpp>
 #include <math/polynomial_unknown.hpp>
 
+using namespace std;
+
 /*
  *	t_polynm_unknown::t_polynm_unknown()
  *
@@ -94,22 +96,22 @@ string t_polynm_unknown::unknownName(const integer &id) {
 string t_polynm_unknown::toString() {
 	string ret = "";
 
-	if (sign < integer(0)) {
+	if (sign.isNegative() == true) {
 		throw xsvException(ERROR_UNREACHABLE, __FILE__, __LINE__, __FUNCTION__, "Invalid unknown sign.");
 	}
 
-	if (prefix == fraction(0, 1)) {
+	if (prefix.isZero() == true) {
 		throw xsvException(ERROR_DIVIDE_ZERO, __FILE__, __LINE__, __FUNCTION__, "Unknown prefix should be zero.");
 	}
 
 	ret += prefix.toString();
 
-	if (ret == "1") {
+	if (ret == integer(1).toString()) {
 		ret = "";
 	}
 
-	if (ret == "-1") {
-		ret = "-";
+	if (ret == integer(-1).toString()) {
+		ret = INTEGER_NEGATIVE_STRING;
 	}
 
 	ret += POLYNM_UNKNOWN_SYMBOL_PREFIX + unknownName(sign);

@@ -38,9 +38,7 @@
 #include <parser/syntax.hpp>
 #include <balancer.hpp>
 
-using std::string;
-using std::vector;
-using std::iterator;
+using namespace std;
 
 /*
  *	void balancerArrangeSide(vector<cdec> &parsed, vector<polynomial> &result)
@@ -139,7 +137,7 @@ bool balancerProcess(const string formula, vector<cdec> &parsed, vector<polynomi
 	/*  Remove zero-prefixed elements in the result vector  */
 remove_zero:
 	for (iterParsed = preparsed.begin(), iterEqResult = eqResult.begin(); iterParsed != preparsed.end(); iterParsed++, iterEqResult++) {
-		if (iterEqResult->isNumeric() == true && iterEqResult->getConstant() == fraction(0, 1)) {
+		if (iterEqResult->isNumeric() == true && iterEqResult->getConstant().isZero() == true) {
 			preparsed.erase(iterParsed);
 			eqResult.erase(iterEqResult);
 			goto remove_zero;

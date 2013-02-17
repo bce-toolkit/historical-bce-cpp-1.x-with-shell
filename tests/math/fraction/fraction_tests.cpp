@@ -56,7 +56,7 @@ void fraction_unit_test(string inpath, string outpath) {
 	offile << (numa + numb).toString() <<endl;
 	offile << (numa - numb).toString() <<endl;
 	offile << (numa * numb).toString() <<endl;
-	if (numb != fraction(0, 0)) {
+	if (numb.isZero() == false) {
 		offile << (numa / numb).toString() <<endl;
 	} else {
 		offile << "Divide by zero." <<endl;

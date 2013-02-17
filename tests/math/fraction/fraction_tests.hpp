@@ -8,7 +8,7 @@
 
 	#include <string>
 
-	using std::string;
+	using namespace std;
 
 	/*  Declares  */
 	void fraction_unit_test(string inpath, string outpath);

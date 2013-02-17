@@ -27,7 +27,7 @@
 #include <cctype>
 #include <parser/common.hpp>
 
-using std::string;
+using namespace std;
 
 /*
  *	string parserNumericPrefix(string &src, string &remain)
@@ -59,16 +59,20 @@ string parserNumericPrefix(const string &src, string &remain) {
  */
 string parserNumericSuffix(const string &src, string &remain) {
 	size_t idx;
+
 	for (idx = 1; idx <= src.length(); idx++) {
 		if (!isdigit(src.at(src.length() - idx))) {
 			break;
 		}
 	}
+
 	if (idx > src.length()) {
 		remain = "";
 		return(src);
 	}
+
 	remain = src.substr(0, src.length() - idx + 1);
+
 	return(src.substr(src.length() - idx + 1));
 }
 

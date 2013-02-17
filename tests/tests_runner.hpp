@@ -5,6 +5,11 @@
 
 #ifndef __TESTS_RUNNER_HPP__
 	#define __TESTS_RUNNER_HPP__
+
+	#include <string>
+
+	using namespace std;
+
 	struct t_unit_test_table {
 		string name;
 		string path;

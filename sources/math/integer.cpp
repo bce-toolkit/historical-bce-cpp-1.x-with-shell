@@ -31,11 +31,7 @@
 #include <common/exception.hpp>
 #include <math/integer.hpp>
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::string;
-using std::iterator;
+using namespace std;
 
 /*  Internal macro  */
 /*  __get_bitlength(number): Get the length of a positive integer  */
@@ -130,8 +126,10 @@ integer::integer(const string &src) {
  *	Destructor.
  */
 integer::~integer() {
-	delete []bits;
-	bits = NULL;
+	if (bits != NULL) {
+		delete []bits;
+		bits = NULL;
+	}
 }
 
 /*
@@ -197,7 +195,7 @@ void integer::setValue(const string &value) {
 	string::reverse_iterator pread, pend;
 	char *pwrite;
 
-	if (value == "") {
+	if (value.length() == 0) {
 		setValue(0);
 	}
 
@@ -675,6 +673,19 @@ void integer::absolute() {
  */
 void integer::opposite() {
 	negative = !negative;
+}
+
+/*
+ *	bool integer::isZero()
+ *
+ *	Get whether it is zero.
+ */
+bool integer::isZero() {
+	if (__integer_is_zero(*this)) {
+		return(true);
+	} else {
+		return(false);
+	}
 }
 
 /*

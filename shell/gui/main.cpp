@@ -28,6 +28,8 @@
 #include "bce.hpp"
 #include "variable.hpp"
 
+using namespace std;
+
 int main(int argc, char *argv[]) {
 	QApplication a(argc, argv);
 	QTranslator translator;

@@ -30,10 +30,10 @@
 	#include <vector>
 	#include <parser/element.hpp>
 
-	using std::string;
-	using std::vector;
+	using namespace std;
 
 	/*  Definations  */
+	#define PARSER_MOLECULE_HYDRATE_SIGN "."
 	#define PARSER_MOLECULE_BRACKET_BEGIN "("
 	#define PARSER_MOLECULE_BRACKET_END ")"
 	#define PARSER_MOLECULE_NUMBER_ONE "1"

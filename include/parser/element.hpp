@@ -29,7 +29,7 @@
 	#include <string>
 	#include <math/integer.hpp>
 
-	using std::string;
+	using namespace std;
 
 	/*  Internal ADT  */
 	struct t_element {

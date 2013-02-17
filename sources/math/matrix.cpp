@@ -27,8 +27,7 @@
 #include <math/fraction.hpp>
 #include <math/matrix.hpp>
 
-using std::cout;
-using std::endl;
+using namespace std;
 
 /*
  *	matrix::matrix()
@@ -126,11 +125,13 @@ void matrix::resizeMatrix(const size_t mx, const size_t my) {
 void matrix::destroyMatrix() {
 	size_t py;
 
-	for (py = 0; py < max_y; py++) {
-		delete [](mtx[py]);
-	}
+	if (mtx != NULL) {
+		for (py = 0; py < max_y; py++) {
+			delete [](mtx[py]);
+		}
 
-	delete []mtx;
+		delete []mtx;
+	}
 }
 
 /*

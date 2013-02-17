@@ -30,8 +30,7 @@
 	#include <math/polynomial.hpp>
 	#include <parser/syntax.hpp>
 
-	using std::string;
-	using std::vector;
+	using namespace std;
 
 	/*  Declares  */
 	void balancerArrangeSide(vector<cdec> &parsed, vector<polynomial> &result);

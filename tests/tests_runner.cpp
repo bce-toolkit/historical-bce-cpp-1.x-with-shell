@@ -46,7 +46,7 @@ struct t_unit_test_table tests[10] = {
 		.higher = 5,
 		.test = integer_unit_test
 	},
-	{
+/*	{
 		.name = "math/integer.cpp [Extra test]",
 		.path = "math/integer/extra/integer",
 		.lower = 1,
@@ -66,7 +66,7 @@ struct t_unit_test_table tests[10] = {
 		.lower = 1,
 		.higher = 10,
 		.test = lcm_unit_test
-	},
+	},*/
 	{
 		.name = "math/equation.cpp",
 		.path = "math/equation/equation",

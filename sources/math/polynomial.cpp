@@ -33,9 +33,7 @@
 #include <math/polynomial_unknown.hpp>
 #include <math/polynomial.hpp>
 
-using std::lower_bound;
-using std::vector;
-using std::string;
+using namespace std;
 
 /*  Internal macro  */
 /*  __max(a, b): Get the maximum number of two integers (@a, @b)  */
@@ -106,22 +104,6 @@ void polynomial::clear() {
 }
 
 /*
- *	void polynomial::sortOut()
- *
- *	Remove useless unknown from the polynomial.
- */
-void polynomial::sortOut() {
-	vector<polynm_unknown>::iterator iterUnknown;
-resort:
-	for (iterUnknown = unknowns.begin(); iterUnknown != unknowns.end(); iterUnknown++) {
-		if (iterUnknown->prefix == fraction(0, 1)) {
-			unknowns.erase(iterUnknown);
-			goto resort;
-		}
-	}
-}
-
-/*
  *	void polynomial::addUnknown(const integer &sign, const fraction &prefix)
  *
  *	Add an unknown to the polynomial if it doesn't exist. Otherwise, add its prefix
@@ -131,22 +113,23 @@ void polynomial::addUnknown(const integer &sign, const fraction &prefix) {
 	polynm_unknown newItem;
 	vector<polynm_unknown>::iterator find;
 
+	if (const_cast<fraction&>(prefix).isZero() == true) {
+		return;
+	}
+
 	newItem.setValue(sign, prefix);
 
 	find = lower_bound(unknowns.begin(), unknowns.end(), newItem);
 	if (find != unknowns.end()) {
 		if (*find == newItem) {
 			find->prefix += newItem.prefix;
-			if (find->prefix == fraction(0, 1)) {
+			if (find->prefix.isZero() == true) {
 				unknowns.erase(find);
 			}
 			return;
 		}
 	}
 	unknowns.insert(find, newItem);
-
-	/*  TODO: Need to optimize  */
-	sortOut();
 }
 
 /*
@@ -177,11 +160,14 @@ void polynomial::multiply(const fraction &src) {
 
 	constant *= src;
 
+multiply:
 	for (iterUnknown = unknowns.begin(); iterUnknown != unknowns.end(); iterUnknown++) {
 		iterUnknown->prefix *= src;
+		if (iterUnknown->prefix.isZero() == true) {
+			unknowns.erase(iterUnknown);
+			goto multiply;
+		}
 	}
-
-	sortOut();
 }
 
 /*
@@ -258,7 +244,7 @@ void polynomial::vectorRemoveOnlyUnknown(vector<polynomial> &dest) {
 	vector<polynm_unknown>::iterator iterUnknown;
 
 	for (iterDest = dest.begin(); iterDest != dest.end(); iterDest++) {
-		if (iterDest->unknowns.size() != 1 || iterDest->unknowns.at(0).sign != integer(0)) {
+		if (iterDest->unknowns.size() != 1 || iterDest->unknowns.at(0).sign.isZero() == false) {
 			return;
 		}
 	}
@@ -329,27 +315,27 @@ string polynomial::toString() {
 	for (iterUnknown = unknowns.begin(); iterUnknown != unknowns.end(); iterUnknown++) {
 		tmp = iterUnknown->toString();
 
-		if (ret != "" && ret.at(ret.length() - 1) == '+' && tmp.substr(0, 1) == POLYNOMIAL_MINUS) {
+		if (ret.length() != 0 && ret.at(ret.length() - 1) == '+' && tmp.substr(0, 1) == POLYNOMIAL_MINUS) {
 			ret.erase(ret.length() - 1, 1);
 		}
 
-		if (tmp != "") {
+		if (tmp.length() != 0) {
 			ret += tmp + ((iterUnknown + 1 == unknowns.end()) ? "" : POLYNOMIAL_PLUS);
 		}
 	}
 
 	scst = constant.toString();
 
-	if (scst != POLYNOMIAL_ZERO) {
+	if (scst != integer(0).toString()) {
 		if (scst.substr(0, 1) == POLYNOMIAL_MINUS) {
 			ret += scst;
 		} else {
-			ret += ((ret == "") ? "" : POLYNOMIAL_PLUS) + scst;
+			ret += ((ret.length() == 0) ? "" : POLYNOMIAL_PLUS) + scst;
 		}
 	}
 
-	if (ret == "") {
-		ret = POLYNOMIAL_ZERO;
+	if (ret.length() == 0) {
+		ret = integer(0).toString();
 	}
 
 	return(ret);
@@ -373,12 +359,12 @@ bool polynomial::isAllNegative() {
 	vector<polynm_unknown>::iterator iterUnknown;
 
 	for (iterUnknown = unknowns.begin(); iterUnknown != unknowns.end(); iterUnknown++) {
-		if (iterUnknown->prefix >= fraction(0, 1)) {
+		if (iterUnknown->prefix.isNegative() == false) {
 			return(false);
 		}
 	}
 
-	if (constant > fraction(0, 1)) {
+	if (constant.isNegative() == false && constant.isZero() == false) {
 		return(false);
 	} else {
 		return(true);

@@ -91,8 +91,7 @@ void MainWindow::on_cmdBalance_clicked() {
 	string input, output;
 	input = ui->txtEquation->text().toStdString();
 	removeSpaces(input);
-	if (input == "") {
-
+	if (input.length() == 0) {
 		QMessageBox::critical(this, QMessageBox::tr("Error"), QMessageBox::tr("Please type a valid chemical equation."), QMessageBox::Ok);
 		ui->txtEquation->setFocus();
 		return;
@@ -125,7 +124,7 @@ void MainWindow::on_cmdLoadFile_clicked() {
 	ifstream file;
 	ui->cmdBalance->setEnabled(false);
 	ui->cmdLoadFile->setEnabled(false);
-	if (path != "") {
+	if (path.length() != 0) {
 		try {
 			try {
 				ui->txtResult->clear();

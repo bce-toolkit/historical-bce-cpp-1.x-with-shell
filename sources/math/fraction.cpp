@@ -29,7 +29,7 @@
 #include <math/integer.hpp>
 #include <math/fraction.hpp>
 
-using std::string;
+using namespace std;
 
 /*
  *	fraction::fraction()
@@ -86,7 +86,7 @@ fraction::~fraction() {
 string fraction::toString() {
 	integer tmp;
 
-	if (numerator % denominator == integer(0)) {
+	if ((numerator % denominator).isZero() == true) {
 		return((numerator / denominator).toString());
 	}
 
@@ -101,7 +101,7 @@ string fraction::toString() {
 void fraction::simplify() {
 	integer g;
 
-	if (numerator == integer(0)) {
+	if (numerator.isZero() == true) {
 		denominator = integer(1);
 		return;
 	}
@@ -208,7 +208,7 @@ fraction fraction::multiply(const fraction &na, const fraction &nb) {
 fraction fraction::divide(const fraction &na, const fraction &nb) {
 	integer na_numer(na.numerator), na_denomin(na.denominator), nb_numer(nb.numerator), nb_denomin(nb.denominator);
 
-	if (const_cast<integer&>(nb.numerator) == integer(0)) {
+	if (const_cast<integer&>(nb.numerator).isZero() == true) {
 		throw xsvException(ERROR_DIVIDE_ZERO, __FILE__, __LINE__, __FUNCTION__, "Divide by zero.");
 	}
 
@@ -230,12 +230,40 @@ int fraction::compare(const fraction &na, const fraction &nb) {
 
 	cmp = na_denomin * nb_numer - na_numer * nb_denomin;
 
-	if (cmp == integer(0)) {
+	if (cmp.isZero() == true) {
 		return(0);
-	} else if (cmp > integer(0)) {
-		return(-1);
-	} else {
+	}
+
+	if (cmp.isNegative() == true) {
 		return(1);
+	} else {
+		return(-1);
+	}
+}
+
+/*
+ *	bool fraction::isZero()
+ *
+ *	Get whether it is zero.
+ */
+bool fraction::isZero() {
+	if (numerator.isZero() == true) {
+		return(true);
+	} else {
+		return(false);
+	}
+}
+
+/*
+ *	bool fraction::isNegative()
+ *
+ *	Get whether it is negative.
+ */
+bool fraction::isNegative() {
+	if (numerator.isNegative() == true) {
+		return(true);
+	} else {
+		return(false);
 	}
 }
 

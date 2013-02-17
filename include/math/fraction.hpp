@@ -31,7 +31,7 @@
 
 	#define FRACTION_SEMICOLON "/"
 
-	using std::string;
+	using namespace std;
 
 	class fraction {
 	public:
@@ -47,6 +47,8 @@
 		void setValue(const fraction &src);
 		void setValue(const integer &numer, const integer &denomin);
 		void setValue(const int &numer, const int &denomin);
+		bool isZero();
+		bool isNegative();
 		fraction& operator=(const fraction &src);
 		bool operator==(const fraction &src);
 		bool operator!=(const fraction &src);
