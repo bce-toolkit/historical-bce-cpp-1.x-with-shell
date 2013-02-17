@@ -18,5 +18,5 @@ DOCUMENTATION:
     There are various README files in docs/ subdirectory: these typically contain principle for some modules.
 
 SOFTWARE REQUIREMENTS:
-    Compiling the 1.x shell requires up-to-date versions of CMake and various compiler packages (eg. gcc or mingw32).
+    Compiling the 1.x shell requires up-to-date versions of CMake, QT SDK and various compiler packages (eg. gcc or mingw32).
 

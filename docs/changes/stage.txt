@@ -1,3 +1,6 @@
+Sun Feb 17 21:07:55 2013 Ji WenCong <whs_jwc@163.com>
+	* Restore README.
+
 Sun Feb 17 21:04:05 2013 Ji WenCong <whs_jwc@163.com>
 	* Restore unit tests.
 
