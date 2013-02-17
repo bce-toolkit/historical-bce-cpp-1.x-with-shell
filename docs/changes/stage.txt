@@ -1,3 +1,7 @@
+Sun Feb 17 21:13:09 2013 Ji WenCong <whs_jwc@163.com>
+	* Remove bce-gui.pro.user
+	* Stable channel: 1.0.728.3 => 1.0.728.4
+
 Sun Feb 17 21:07:55 2013 Ji WenCong <whs_jwc@163.com>
 	* Restore README.
 

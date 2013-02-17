@@ -26,11 +26,11 @@
 #ifndef __VERSION_H__
 	#define __VERSION_H__
 
-	#define VER_FILEVERSION             1,0,728,3
-	#define VER_FILEVERSION_STR         "1.0.728.3\0"
+	#define VER_FILEVERSION             1,0,728,4
+	#define VER_FILEVERSION_STR         "1.0.728.4\0"
 
-	#define VER_PRODUCTVERSION          1,0,728,3
-	#define VER_PRODUCTVERSION_STR      "1.0.728.3\0"
+	#define VER_PRODUCTVERSION          1,0,728,4
+	#define VER_PRODUCTVERSION_STR      "1.0.728.4\0"
 
 	#define VER_COMPANYNAME_STR         "The BCE++ Authors"
 	#define VER_LEGALCOPYRIGHT_STR      "Copyright (C) 2012-2013 the BCE++ Authors. All rights reserved."
