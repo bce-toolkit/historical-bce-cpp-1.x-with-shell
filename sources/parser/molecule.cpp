@@ -134,7 +134,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 						return(false);
 					}
 
-					if (status != NULL) {
+					if (status != NULL && replace_table[tableID].status != STATUS_NONE) {
 						*status = replace_table[tableID].status;
 					}
 
