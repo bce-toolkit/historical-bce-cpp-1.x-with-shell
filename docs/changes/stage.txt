@@ -1,3 +1,6 @@
+Wed Feb 20 23:06:35 2013 Ji WenCong <whs_jwc@163.com>
+        * Stable channel: 1.0.728.4 => 1.0.728.5
+
 Wed Feb 20 23:00:01 2013 Ji WenCong <whs_jwc@163.com>
         * Add check for STATUS_NONE in molecule.cpp
 
