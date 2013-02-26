@@ -45,6 +45,7 @@
 		bool parseString(const string &src);
 		struct t_element& operator=(const struct t_element &src);
 		bool operator==(const struct t_element &src);
+		bool operator!=(const struct t_element &src);
 		bool operator<(const struct t_element &src);
 		bool operator<=(const struct t_element &src);
 		bool operator>(const struct t_element &src);

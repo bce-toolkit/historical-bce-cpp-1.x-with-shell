@@ -38,7 +38,7 @@
 
 using namespace std;
 
-struct t_unit_test_table tests[10] = {
+struct t_unit_test_table tests[] = {
 	{
 		.name = "math/integer.cpp [Basic test]",
 		.path = "math/integer/basic/integer",
@@ -89,6 +89,13 @@ struct t_unit_test_table tests[10] = {
 		.test = molecule_unit_test
 	},
 	{
+		.name = "parser/molecule.cpp",
+		.path = "bugs/parser/molecule/molecule",
+		.lower = 1,
+		.higher = 1,
+		.test = molecule_unit_test
+	},
+	{
 		.name = "parser/syntax.cpp [Preparser test]",
 		.path = "parser/preparser/preparser",
 		.lower = 1,
@@ -100,6 +107,13 @@ struct t_unit_test_table tests[10] = {
 		.path = "balancer/balancer",
 		.lower = 1,
 		.higher = 434,
+		.test = balancer_unit_test
+	},
+	{
+		.name = "balancer.cpp",
+		.path = "bugs/balancer/balancer",
+		.lower = 1,
+		.higher = 4,
 		.test = balancer_unit_test
 	},
 	{
@@ -170,6 +184,8 @@ int main(int argc, char **argv) {
 	if (remove(tmpFile.c_str()) != 0) {
 		cout << "[ERROR] Cannot remove '" << tmpFile << "'." << endl;
 	}
+
+	cout << "[SUCCEED] Passed all test cases." << endl;
 
 	return(0);
 }

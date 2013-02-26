@@ -44,7 +44,7 @@ string parserNumericPrefix(const string &src, string &remain) {
 	}
 
 	if (idx == src.length()) {
-		remain = "";
+		remain.clear();
 		return(src);
 	} else {
 		remain = src.substr(idx);
@@ -67,7 +67,7 @@ string parserNumericSuffix(const string &src, string &remain) {
 	}
 
 	if (idx > src.length()) {
-		remain = "";
+		remain.clear();
 		return(src);
 	}
 

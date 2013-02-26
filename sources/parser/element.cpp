@@ -36,7 +36,7 @@ using namespace std;
  *	Constructor.
  */
 t_element::t_element() {
-	symbol = "";
+	symbol.clear();
 	count.setValue(0);
 }
 
@@ -103,6 +103,7 @@ bool t_element::parseString(const string &src) {
 		return(true);
 	}
 }
+
 /*
  *	struct t_element& t_element::operator=(const struct t_element &src)
  *
@@ -125,6 +126,19 @@ struct t_element& t_element::operator=(const struct t_element &src) {
  */
 bool t_element::operator==(const struct t_element &src) {
 	if (this->symbol == src.symbol) {
+		return(true);
+	} else {
+		return(false);
+	}
+}
+
+/*
+ *	bool t_element::operator!=(const struct t_element &src)
+ *
+ *	Overload operator `[ptr: this] != @src`
+ */
+bool t_element::operator!=(const struct t_element &src) {
+	if (this->symbol != src.symbol) {
 		return(true);
 	} else {
 		return(false);

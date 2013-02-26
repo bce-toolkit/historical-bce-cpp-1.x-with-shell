@@ -25,6 +25,7 @@
 
 #include <string>
 #include <vector>
+#include <cctype>
 #include <iterator>
 #include <common/exception.hpp>
 #include <math/integer.hpp>
@@ -135,12 +136,10 @@ bool balancerProcess(const string formula, vector<cdec> &parsed, vector<polynomi
 	}
 
 	/*  Remove zero-prefixed elements in the result vector  */
-remove_zero:
 	for (iterParsed = preparsed.begin(), iterEqResult = eqResult.begin(); iterParsed != preparsed.end(); iterParsed++, iterEqResult++) {
 		if (iterEqResult->isNumeric() == true && iterEqResult->getConstant().isZero() == true) {
-			preparsed.erase(iterParsed);
-			eqResult.erase(iterEqResult);
-			goto remove_zero;
+			iterParsed = preparsed.erase(iterParsed) - 1;
+			iterEqResult = eqResult.erase(iterEqResult) - 1;
 		}
 	}
 
@@ -168,9 +167,12 @@ remove_zero:
  */
 bool balancerBuildAnswer(vector<cdec> &parsed, vector<polynomial> &result, string &built) {
 	bool lastSide = false, requireEqual = false;
-	string r = "", connector, tmpR;
+	string r, connector, tmpR, tmpSymbol;
 	vector<cdec>::iterator iterParsed;
 	vector<polynomial>::iterator iterEqResult;
+
+	/*  Initialize  */
+	r.clear();
 
 	for (iterParsed = parsed.begin(), iterEqResult = result.begin(); iterParsed != parsed.end(); iterParsed++, iterEqResult++) {
 		/*
@@ -181,7 +183,7 @@ bool balancerBuildAnswer(vector<cdec> &parsed, vector<polynomial> &result, strin
 		 *            C+   O2=   CO2
 		 */
 		if (iterEqResult->isNoUnknown() == true && iterEqResult->getConstant() == fraction(1, 1)) {
-			tmpR = "";
+			tmpR.clear();
 		} else {
 			tmpR = iterEqResult->toString();
 		}
@@ -191,7 +193,11 @@ bool balancerBuildAnswer(vector<cdec> &parsed, vector<polynomial> &result, strin
 			if (lastSide != iterParsed->right) {
 				requireEqual = true;
 			}
-			connector = (iterParsed->negative == true ? PARSER_SYNTAX_MINUS : "");
+			if (iterParsed->negative == true) {
+				connector = PARSER_SYNTAX_MINUS;
+			} else {
+				connector.clear();
+			}
 		} else {
 			if (lastSide != iterParsed->right) {
 				connector = PARSER_SYNTAX_EQUAL;
@@ -201,17 +207,24 @@ bool balancerBuildAnswer(vector<cdec> &parsed, vector<polynomial> &result, strin
 			}
 		}
 
+		/*  Add bracket for hydrate molecule formula  */
+		if (findHydrateDot(iterParsed->symbol, NULL) == true && iterEqResult->getConstant() != fraction(1, 1)) {
+			tmpSymbol = POLYNOMIAL_BRACKET_BEGIN + iterParsed->symbol + POLYNOMIAL_BRACKET_END;
+		} else {
+			tmpSymbol = iterParsed->symbol;
+		}
+
 		/*  Rebuild  */
 		if (iterEqResult->isNoUnknown() == true) {
-			r += connector + tmpR + iterParsed->symbol;
+			r += connector + tmpR + tmpSymbol;
 		} else {
-			r += connector + POLYNOMIAL_BRACKET_BEGIN + tmpR + POLYNOMIAL_BRACKET_END + iterParsed->symbol;
+			r += connector + POLYNOMIAL_BRACKET_BEGIN + tmpR + POLYNOMIAL_BRACKET_END + tmpSymbol;
 		}
 	}
 
 	/*  If no "=" exists, exit  */
 	if (lastSide == false || requireEqual == true) {
-		r += PARSER_SYNTAX_EQUAL + integer(0).toString();
+		return(false);
 	}
 
 	built = r;
@@ -225,24 +238,19 @@ bool balancerBuildAnswer(vector<cdec> &parsed, vector<polynomial> &result, strin
  *	Balance a chemical equation automatically.
  */
 bool balancerAuto(string &formula, string &result) {
-	try {
-		vector<cdec> parsed;
-		vector<polynomial> eresult;
+	vector<cdec> parsed;
+	vector<polynomial> eresult;
 
-		if (balancerProcess(formula, parsed, eresult) == false) {
-			result = "";
-			return(false);
-		}
-
-		if (balancerBuildAnswer(parsed, eresult, result) == false) {
-			result = "";
-			return(false);
-		}
-
-		return(true);
-	} catch(xsvException &e) {
-		result = e.getDescription();
+	if (balancerProcess(formula, parsed, eresult) == false) {
+		result.clear();
 		return(false);
 	}
+
+	if (balancerBuildAnswer(parsed, eresult, result) == false) {
+		result.clear();
+		return(false);
+	}
+
+	return(true);
 }
 

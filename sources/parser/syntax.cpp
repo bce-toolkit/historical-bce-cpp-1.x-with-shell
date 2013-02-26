@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <algorithm>
 #include <common/exception.hpp>
 #include <math/integer.hpp>
 #include <math/fraction.hpp>
@@ -97,13 +98,12 @@ vector<cdec> syntaxPreparser(const string formula) {
 				rdnegative = (formula.substr(last - 1, 1) == PARSER_SYNTAX_MINUS ? true : false);
 			}
 
-			/*
-			 *  Remove existed prefix, otherwise an issue will occured:
-			 *  Input: 3C+O2=CO
-			 *  Wrong output: 23C+3O2=6CO
-			 *  Right output: 2C+O2=2CO
-			 */
-			parserNumericPrefix(cheq, remainSymbol);
+			/*  Process for hydrate dot.  */
+			if (findHydrateDot(cheq, NULL) == false) {
+				parserNumericPrefix(cheq, remainSymbol);
+			} else {
+				remainSymbol = cheq;
+			}
 
 			/*  Insert the parsed one to result vector  */
 			build.symbol = remainSymbol;
@@ -129,9 +129,10 @@ vector<cdec> syntaxPreparser(const string formula) {
 bool syntaxDecodedToMatrix(vector<cdec> &cdecTable, matrix &target, size_t &mx, size_t &my) {
 	size_t write_x, write_y;
 	vector<cdec>::iterator iterTable;
-	vector<element> sampleElements, parsedElements;
-	vector<element>::iterator iterElement1, iterElement2;
+	vector<element> sampleElements, parsedElements, tmp;
+	vector<element>::iterator iterElement1, iterElement2, find;
 	matrix r;
+	element build;
 
 	/*  Clear  */
 	sampleElements.clear();
@@ -139,8 +140,21 @@ bool syntaxDecodedToMatrix(vector<cdec> &cdecTable, matrix &target, size_t &mx, 
 
 	/*  Pre-parse existed elements  */
 	for (iterTable = cdecTable.begin(); iterTable != cdecTable.end(); iterTable++) {
-		if (parseMolecule(iterTable->symbol, NULL, 1, sampleElements) == false) {
+		parsedElements.clear();
+		if (parseMolecule(iterTable->symbol, NULL, 1, parsedElements) == false) {
 			return(false);
+		}
+
+		if (parsedElements.size() == 0) {
+			iterTable = cdecTable.erase(iterTable) - 1;
+		} else {
+			for (iterElement1 = parsedElements.begin(); iterElement1 != parsedElements.end(); iterElement1++) {
+				build.setValue(iterElement1->symbol, integer(0));
+				find = lower_bound(sampleElements.begin(), sampleElements.end(), build);
+				if (find == sampleElements.end() || *find != build) {
+					sampleElements.insert(find, build);
+				}
+			}
 		}
 	}
 
@@ -152,11 +166,12 @@ bool syntaxDecodedToMatrix(vector<cdec> &cdecTable, matrix &target, size_t &mx, 
 		return(false);
 	}
 
-	r.resizeMatrix(cdecTable.size() + 1, sampleElements.size());
+	r.resizeMatrix(mx, my);
 
 	/*  Re-parse and write data to the matrix  */
 	for (iterTable = cdecTable.begin(), write_x = 0; iterTable != cdecTable.end(); iterTable++, write_x++) {
 		parsedElements.clear();
+
 		if (parseMolecule(iterTable->symbol, NULL, integer(iterTable->negative == iterTable->right ? 1 : -1), parsedElements) == false) {
 			return(false);
 		}

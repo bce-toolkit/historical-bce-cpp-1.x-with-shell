@@ -1,6 +1,6 @@
 	BCE++ release 1.x <http://github.com/xiaojsoft/bceplus>
 
-These are the release notes for BCE++ version 6. Read them carefully, as they tell you what this is all about.
+These are the release notes for BCE++ version 1. Read them carefully, as they tell you what this is all about.
 
 WHAT IS BCE++?
     BCE++ is a mini but functional tool written with C++ programming language which can help you balance some complex chemical equations(or Ion chemical equations), written by Ji WenCong with assistance from hackers across the Internet. It aims to simplify the calculation of chemical equations.

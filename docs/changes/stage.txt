@@ -1,8 +1,14 @@
+Sat Feb 23 00:07:12 2013 Ji WenCong <whs_jwc@163.com>
+	* Fixed issues in parsing hydrate molecules.
+	* Optimize for parser module.
+	* Remove prebuilt binaries.
+	* Stable channel: 1.0.728.5 => 1.0.729.0
+
 Wed Feb 20 23:06:35 2013 Ji WenCong <whs_jwc@163.com>
-        * Stable channel: 1.0.728.4 => 1.0.728.5
+	* Stable channel: 1.0.728.4 => 1.0.728.5
 
 Wed Feb 20 23:00:01 2013 Ji WenCong <whs_jwc@163.com>
-        * Add check for STATUS_NONE in molecule.cpp
+	* Add check for STATUS_NONE in molecule.cpp
 
 Sun Feb 17 21:13:09 2013 Ji WenCong <whs_jwc@163.com>
 	* Remove bce-gui.pro.user

@@ -39,6 +39,7 @@
 	#define PARSER_MOLECULE_NUMBER_ONE "1"
 
 	/*  Declares  */
+	bool findHydrateDot(const string &formula, size_t *position);
 	bool parseMolecule(const string &formula, int *status, const integer &suffix, vector<element> &result);
 #endif
 

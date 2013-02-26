@@ -67,8 +67,11 @@ MainWindow::~MainWindow() {
 }
 
 void removeSpaces(string &dest) {
-	string r = "";
+	string r;
 	string::iterator it;
+
+	r.clear();
+
 	for (it = dest.begin(); it != dest.end(); it++) {
 		if (*it == BCE_DESCRIPTOR) {
 			break;
@@ -77,6 +80,7 @@ void removeSpaces(string &dest) {
 			r.insert(r.end(), *it);
 		}
 	}
+
 	dest = r;
 }
 

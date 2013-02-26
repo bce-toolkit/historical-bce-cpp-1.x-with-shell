@@ -23,7 +23,6 @@
  *	SUCH DAMAGE.
 */
 
-#include <iostream>
 #include <string>
 #include <common/exception.hpp>
 #include <math/integer.hpp>

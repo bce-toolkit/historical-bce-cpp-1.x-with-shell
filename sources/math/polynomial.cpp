@@ -160,12 +160,10 @@ void polynomial::multiply(const fraction &src) {
 
 	constant *= src;
 
-multiply:
 	for (iterUnknown = unknowns.begin(); iterUnknown != unknowns.end(); iterUnknown++) {
 		iterUnknown->prefix *= src;
 		if (iterUnknown->prefix.isZero() == true) {
-			unknowns.erase(iterUnknown);
-			goto multiply;
+			iterUnknown = unknowns.erase(iterUnknown) - 1;
 		}
 	}
 }
@@ -309,28 +307,42 @@ void polynomial::vectorReindex(vector<polynomial> &dest) {
  *	Convert the polynomial to string.
  */
 string polynomial::toString() {
-	string ret = "", tmp = "", scst;
+	string ret, tmp, scst;
 	vector<polynm_unknown>::iterator iterUnknown;
 
+	/*  Initialize  */
+	ret.clear();
+	tmp.clear();
+	scst.clear();
+
+	/*  Convert each bit  */
 	for (iterUnknown = unknowns.begin(); iterUnknown != unknowns.end(); iterUnknown++) {
 		tmp = iterUnknown->toString();
 
-		if (ret.length() != 0 && ret.at(ret.length() - 1) == '+' && tmp.substr(0, 1) == POLYNOMIAL_MINUS) {
+		if (ret.length() != 0 && ret.substr(ret.length() - 1, 1) == POLYNOMIAL_PLUS && tmp.substr(0, 1) == POLYNOMIAL_MINUS) {
 			ret.erase(ret.length() - 1, 1);
 		}
 
 		if (tmp.length() != 0) {
-			ret += tmp + ((iterUnknown + 1 == unknowns.end()) ? "" : POLYNOMIAL_PLUS);
+			if (iterUnknown + 1 == unknowns.end()) {
+				ret += tmp;
+			} else {
+				ret += tmp + POLYNOMIAL_PLUS;
+			}
 		}
 	}
 
 	scst = constant.toString();
 
-	if (scst != integer(0).toString()) {
+	if (constant.isZero() == false) {
 		if (scst.substr(0, 1) == POLYNOMIAL_MINUS) {
 			ret += scst;
 		} else {
-			ret += ((ret.length() == 0) ? "" : POLYNOMIAL_PLUS) + scst;
+			if (ret.length() == 0) {
+				ret += scst;
+			} else {
+				ret += POLYNOMIAL_PLUS + scst;
+			}
 		}
 	}
 

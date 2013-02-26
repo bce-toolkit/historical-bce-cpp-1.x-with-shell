@@ -32,11 +32,42 @@
 #include <parser/bracket.hpp>
 #include <parser/common.hpp>
 #include <parser/element.hpp>
+
 #define __REQUIRE_MOLECULE_REPLACE_TABLE__
 #include <parser/molecule.hpp>
 #undef __REQUIRE_MOLECULE_REPLACE_TABLE__
 
 using namespace std;
+
+/*
+ *	bool findHydrateDot(const string &formula, size_t *position)
+ *
+ *	Find the first hydrate dot in the formula.
+ */
+bool findHydrateDot(const string &formula, size_t *position) {
+	size_t idx;
+	integer stack;
+	stack.setValue(0);
+	for (idx = 0; idx < formula.length(); idx++) {
+		if (formula.substr(idx, 1) == BRACKET_START_A || formula.substr(idx, 1) == BRACKET_START_B || formula.substr(idx, 1) == BRACKET_START_C) {
+			stack++;
+			continue;
+		}
+
+		if (formula.substr(idx, 1) == BRACKET_END_A || formula.substr(idx, 1) == BRACKET_END_B || formula.substr(idx, 1) == BRACKET_END_C) {
+			stack--;
+			continue;
+		}
+
+		if (stack.isZero() == true && formula.substr(idx, 1) == PARSER_MOLECULE_HYDRATE_SIGN) {
+			if (position != NULL) {
+				*position = idx;
+			}
+			return(true);
+		}
+	}
+	return(false);
+}
 
 /*
  *	bool parseMolecule(const string &formula, int *status, const integer &suffix, vector<element> &result)
@@ -50,6 +81,11 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 	string rdformula, rdprefix, bkleft, bkmid, bkright, tmp_prefix, tmp_formula;
 	vector<element>::iterator find;
 
+	/*  Separate with "."  */
+	if (findHydrateDot(formula, &idx) == true) {
+		return(parseMolecule(formula.substr(idx + 1), status, suffix, result) == true && parseMolecule(formula.substr(0, idx), status, suffix, result) == true);
+	}
+
 	/*  Get the prefix number  */
 	rdprefix = parserNumericPrefix(formula, rdformula);
 	if (rdprefix.length() == 0) {
@@ -62,27 +98,8 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 		return(true);
 	}
 
-	/*  Separate with "."  */
-	stack.setValue(0);
-	for (idx = 0; idx < rdformula.length(); idx++) {
-		if (rdformula.substr(idx, 1) == BRACKET_START_A || rdformula.substr(idx, 1) == BRACKET_START_B || rdformula.substr(idx, 1) == BRACKET_START_C) {
-			stack++;
-			continue;
-		}
-
-		if (rdformula.substr(idx, 1) == BRACKET_END_A || rdformula.substr(idx, 1) == BRACKET_END_B || rdformula.substr(idx, 1) == BRACKET_END_C) {
-			stack--;
-			continue;
-		}
-
-		if (stack.isZero() == true && rdformula.substr(idx, 1) == PARSER_MOLECULE_HYDRATE_SIGN) {
-			return(parseMolecule(rdformula.substr(idx + 1), status, rdsuffix, result) == true && parseMolecule(rdformula.substr(0, idx), status, rdsuffix, result) == true);
-		}
-	}
-
 	/*  Parse bracket part  */
 	stack.setValue(0);
-	//bkbegin = rdformula.find_first_of(PARSER_MOLECULE_BRACKET_START);
 	for (bkbegin = 0; bkbegin < rdformula.length(); bkbegin++) {
 		if (rdformula.substr(bkbegin, 1) == BRACKET_START_A || rdformula.substr(bkbegin, 1) == BRACKET_START_B || rdformula.substr(bkbegin, 1) == BRACKET_START_C) {
 			for (idx = bkbegin; idx < rdformula.length(); idx++) {
@@ -101,7 +118,8 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 				}
 			}
 			return(false);
-	bracket_analyzed:
+
+bracket_analyzed:
 			/*  Left part  */
 			bkleft = rdformula.substr(0, bkbegin);
 
@@ -138,7 +156,7 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 						*status = replace_table[tableID].status;
 					}
 
-					goto element_inserted;
+					return(parseMolecule(rdformula.substr(idx), status, rdsuffix, result));
 				}
 			}
 
@@ -150,25 +168,19 @@ bool parseMolecule(const string &formula, int *status, const integer &suffix, ve
 			build.count *= rdsuffix;
 
 			find = lower_bound(result.begin(), result.end(), build);
-			if (find != result.end()) {
-				if (*find == build) {
-					find->count += build.count;
-					if (find->count.isZero() == true) {
-						result.erase(find);
-					}
-					goto element_inserted;
+			if (find != result.end() && *find == build) {
+				find->count += build.count;
+				if (find->count.isZero() == true) {
+					result.erase(find);
 				}
+			} else {
+				result.insert(find, build);
 			}
 
-			result.insert(find, build);
-element_inserted:
-			if (parseMolecule(rdformula.substr(idx), status, rdsuffix, result) == false) {
-				return(false);
-			} else {
-				return(true);
-			}
+			return(parseMolecule(rdformula.substr(idx), status, rdsuffix, result));
 		}
 	}
+
 	return(false);
 }
 
